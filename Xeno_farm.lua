@@ -936,6 +936,33 @@ for i,g in ipairs(guardians) do
     end
 end
 
+local sniperPos = {
+    CFrame.new(-209.96,3.54,-77.19),
+    CFrame.new(-207.22,3.39,-77.26),
+    CFrame.new(-208.03,3.54,-80.03),
+    CFrame.new(-210.82,3.45,-80.27),
+    CFrame.new(-214.86,3.54,-80.93),
+    CFrame.new(-218.45,3.39,-81.39)
+}
+
+local snipers = {}
+
+for i,cf in ipairs(sniperPos) do
+    safeWait()
+    waitGold("Lava Sniper", false)
+
+    local s = spawnTowerSafe({"Lava Sniper", cf, nil, "Laser Sniper", "Lava Sniper"})
+    s = safeFix(s, cf, "Laser Sniper")
+
+    if s then
+        waitGold("Fire Shades", true, s)
+        s = spawnTowerSafe({"Fire Shades", s:GetPivot(), s, "Laser Sniper"})
+
+        waitGold("Magma Hat", true, s)
+        snipers[i] = spawnTowerSafe({"Magma Hat", s:GetPivot(), s, "Laser Sniper"})
+    end
+end
+
 -- =====================
 -- 7. WIZARD (2 FULL)
 -- =====================
@@ -985,36 +1012,6 @@ if m then
 
     waitGold("Futurist", true, m)
     m = spawnTowerSafe({"Futurist", m:GetPivot(), m, "Machinist"})
-end
-
--- =====================
--- 9. LAVA SNIPER (6 → LV3)
--- =====================
-local sniperPos = {
-    CFrame.new(-209.96,3.54,-77.19),
-    CFrame.new(-207.22,3.39,-77.26),
-    CFrame.new(-208.03,3.54,-80.03),
-    CFrame.new(-210.82,3.45,-80.27),
-    CFrame.new(-214.86,3.54,-80.93),
-    CFrame.new(-218.45,3.39,-81.39)
-}
-
-local snipers = {}
-
-for i,cf in ipairs(sniperPos) do
-    safeWait()
-    waitGold("Lava Sniper", false)
-
-    local s = spawnTowerSafe({"Lava Sniper", cf, nil, "Laser Sniper", "Lava Sniper"})
-    s = safeFix(s, cf, "Laser Sniper")
-
-    if s then
-        waitGold("Fire Shades", true, s)
-        s = spawnTowerSafe({"Fire Shades", s:GetPivot(), s, "Laser Sniper"})
-
-        waitGold("Magma Hat", true, s)
-        snipers[i] = spawnTowerSafe({"Magma Hat", s:GetPivot(), s, "Laser Sniper"})
-    end
 end
 
 -- =====================
