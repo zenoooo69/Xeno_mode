@@ -310,7 +310,7 @@ local CUSTOM_COST = {
 
     -- Ray Blaster
     ["Geo Blaster"] = 2875,
-    ["Geometrical Suit"] = 2000,
+    ["Geometrical Suit"] = 1200,
     ["Hacker"] = 3250,
 }
 
