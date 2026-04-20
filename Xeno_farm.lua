@@ -10,6 +10,7 @@ local gold = player:WaitForChild("leaderstats"):WaitForChild("Gold")
 local RunService = game:GetService("RunService")
 local Towers = workspace:WaitForChild("Towers")
 local ignore = {}
+local BUILD_DONE = false
 
 -- =====================
 -- AUTO CHARM
@@ -426,11 +427,17 @@ local function waitGold(name, isUpgrade, towerInstance)
             end
         end
 
-        goldLabel.Text = "Gold: "..gold.Value
-        needLabel.Text = "Need: "..math.max(0, cost - gold.Value)
-        costLabel.Text = "Cost: "..cost
-        nextLabel.Text = "Next: "..name
-
+        if BUILD_DONE then
+            goldLabel.Text = "Build Done"
+            needLabel.Text = "Rebuilding..."
+            costLabel.Text = "-"
+            nextLabel.Text = "-"
+        else
+            goldLabel.Text = "Gold: "..gold.Value
+            needLabel.Text = "Need: "..math.max(0, cost - gold.Value)
+            costLabel.Text = "Cost: "..cost
+            nextLabel.Text = "Next: "..name
+        end
         task.wait(0.1)
     end
 end
@@ -1219,4 +1226,16 @@ for i,cf in ipairs(catalystPos) do
         catalysts[i] = spawnTowerSafe({"Deadly Bolts", c:GetPivot(), c, "Catalyst"})
     end
 end
+
+-- =====================
+-- BUILD FINISHED
+-- =====================
+BUILD_DONE = true
+
+goldLabel.Text = "Build Done"
+needLabel.Text = "Rebuilding..."
+costLabel.Text = "-"
+nextLabel.Text = "-"
+
+print("✅ BUILD DONE - REBUILD MODE")
 
