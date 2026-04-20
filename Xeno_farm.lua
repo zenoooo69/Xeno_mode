@@ -280,7 +280,7 @@ local CUSTOM_COST = {
     ["Deadly Bolts"] = 21500,
 
     -- Chainsaw
-    ["ChainsawWielder"] = 1350,
+    ["Chainsaw Wielder"] = 1350,
     ["Soundproof"] = 1800,
     ["Extra Protection"] = 8600,
     ["Magic Chainsaw"] = 34500,
@@ -370,12 +370,12 @@ local UPGRADE_CHAIN = {
 
     ["Catalyst"] = {
         "Electrically Charged",
-        "VoidLightning",
+        "Void Lightning",
         "High Voltage",
         "Deadly Bolts"
     },
 
-    ["ChainsawWielder"] = {
+    ["Chainsaw Wielder"] = {
         "Soundproof",
         "Extra Protection",
         "Magic Chainsaw",
@@ -1094,4 +1094,129 @@ for i,m in ipairs(mortars) do
     end
 end
 
+
+-- =====================
+-- DRONE PILOT (5 → LV5)
+-- =====================
+
+local dronePos = {
+    CFrame.new(-215.95, 3.54, -61.39),
+    CFrame.new(-213.32, 3.54, -61.34),
+    CFrame.new(-210.48, 3.54, -61.16),
+    CFrame.new(-215.00, 3.39, -57.89),
+    CFrame.new(-212.20, 3.39, -57.90)
+}
+
+local drones = {}
+
+-- Spawn base
+for i,cf in ipairs(dronePos) do
+    safeWait()
+    waitGold("Helicopter Kid", false)
+
+    drones[i] = spawnTowerSafe({
+        "Helicopter Kid",
+        cf,
+        nil,
+        "Drone Pilot",
+        "Helicopter Kid"
+    })
+end
+
+-- Upgrade lên LV5
+for i,d in ipairs(drones) do
+    safeWait()
+    d = safeFix(d, dronePos[i], "Drone Pilot")
+
+    if d then
+        waitGold("Stable Flying", true, d)
+        d = spawnTowerSafe({"Stable Flying", d:GetPivot(), d, "Drone Pilot"})
+
+        waitGold("Bombs", true, d)
+        d = spawnTowerSafe({"Bombs", d:GetPivot(), d, "Drone Pilot"})
+
+        waitGold("Toxic Bombs", true, d)
+        d = spawnTowerSafe({"Toxic Bombs", d:GetPivot(), d, "Drone Pilot"})
+
+        waitGold("Death Heli", true, d)
+        drones[i] = spawnTowerSafe({"Death Heli", d:GetPivot(), d, "Drone Pilot"})
+    end
+end
+
+-- =====================
+-- CHAINSAW (4 → LV5)
+-- =====================
+
+local chainsawPos = {
+    CFrame.new(-220.85, 3.28, -63.54),
+    CFrame.new(-220.82, 3.28, -60.93),
+    CFrame.new(-220.82, 3.28, -57.81),
+    CFrame.new(-218.02, 3.28, -56.76)
+}
+
+local chainsaws = {}
+
+-- Spawn base
+for i,cf in ipairs(chainsawPos) do
+    safeWait()
+    waitGold("ChainsawWielder", false)
+
+    chainsaws[i] = spawnTowerSafe({
+        "ChainsawWielder",
+        cf,
+        nil,
+        "ChainsawWielder"
+    })
+end
+
+-- Upgrade lên LV5
+for i,c in ipairs(chainsaws) do
+    safeWait()
+    c = safeFix(c, chainsawPos[i], "Chainsaw Wielder")
+
+    if c then
+        waitGold("Soundproof", true, c)
+        c = spawnTowerSafe({"Soundproof", c:GetPivot(), c, "Chainsaw Wielder"})
+
+        waitGold("Extra Protection", true, c)
+        c = spawnTowerSafe({"Extra Protection", c:GetPivot(), c, "Chainsaw Wielder"})
+
+        waitGold("Magic Chainsaw", true, c)
+        c = spawnTowerSafe({"Magic Chainsaw", c:GetPivot(), c, "Chainsaw Wielder"})
+
+        waitGold("Magical Shredding", true, c)
+        chainsaws[i] = spawnTowerSafe({"Magical Shredding", c:GetPivot(), c, "Chainsaw Wielder"})
+    end
+end
+
+
+local catalystPos = {
+    CFrame.new(-216.8484,3.2845,-52.3482),
+    CFrame.new(-212.6117,3.3995,-64.7285),
+    CFrame.new(-209.4589,3.2845,-56.9277)
+}
+
+local catalysts = {}
+
+for i,cf in ipairs(catalystPos) do
+    safeWait()
+    waitGold("Catalyst", false)
+
+    local c = spawnTowerSafe({"Catalyst", cf, nil, "Catalyst"})
+    c = safeFix(c, cf, "Catalyst")
+
+    if c then
+        waitGold("Electrically Charged", true, c)
+        c = spawnTowerSafe({"Electrically Charged", c:GetPivot(), c, "Catalyst"})
+
+        waitGold("Void Lightning", true, c)
+        c = spawnTowerSafe({"Void Lightning", c:GetPivot(), c, "Catalyst"})
+
+        waitGold("High Voltage", true, c)
+        c = spawnTowerSafe({"High Voltage", c:GetPivot(), c, "Catalyst"})
+
+        waitGold("Deadly Bolts", true, c)
+        catalysts[i] = spawnTowerSafe({"Deadly Bolts", c:GetPivot(), c, "Catalyst"})
+    end
+end
 
