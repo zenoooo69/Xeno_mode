@@ -307,6 +307,11 @@ local CUSTOM_COST = {
     ["Second Machine"] = 3200,
     ["True Machinist"] = 9000,
     ["Futurist"] = 19250,
+
+    -- Ray Blaster
+    ["Geo Blaster"] = 2875,
+    ["Geometrical Suit"] = 2000,
+    ["Hacker"] = 3250,
 }
 
 local function getCost(name, up, towerInstance)
@@ -956,7 +961,7 @@ local function fullWizard(cf)
 end
 
 fullWizard(CFrame.new(-213.06,3.39,-72.91))
-fullWizard(CFrame.new(-210.74,3.39,-73.72))
+fullWizard(CFrame.new(-209.74,3.39,-73.72))
 
 -- =====================
 -- 8. MACHINIST
