@@ -329,7 +329,10 @@ local function getCost(name, up, towerInstance)
 
     return math.floor(cost + 1)
 end
+
 local UPGRADE_CHAIN = {
+
+    -- GUARDIAN
     ["Guardian"] = {
         "Deserted Armor",
         "Snowy Helmet",
@@ -338,14 +341,16 @@ local UPGRADE_CHAIN = {
         "Guardian Angel"
     },
 
+    -- LASER SNIPER (Lava Sniper skin)
     ["Laser Sniper"] = {
-        "Pro Sniper",
-        "Glowing Hat",
-        "More Grip",
-        "Heavy Clothes",
-        "Frosted Lasers"
+        "Fire Shades",
+        "Magma Hat",
+        "Lava Coat",
+        "Eruption Sniper",
+        "Volcanic Lasers"
     },
 
+    -- WIZARD
     ["Wizard"] = {
         "Galaxy Potions",
         "Galaxy Spells",
@@ -353,6 +358,7 @@ local UPGRADE_CHAIN = {
         "Galactic Staff"
     },
 
+    -- MACHINIST
     ["Machinist"] = {
         "Faster Working",
         "Second Machine",
@@ -360,6 +366,7 @@ local UPGRADE_CHAIN = {
         "Futurist"
     },
 
+    -- LAVA MORTAR
     ["Lava Mortar"] = {
         "Electric Hat",
         "Lightning Lava",
@@ -367,8 +374,16 @@ local UPGRADE_CHAIN = {
         "Mega Zap Mortar"
     },
 
-    -- 🔥 NEW
+    -- RAY BLASTER
+    ["Ray Blaster"] = {
+        "Geometrical Suit",
+        "Hacker",
+        "Overclocked Core",
+        "Digital Overdrive",
+        "Quantum Blaster"
+    },
 
+    -- CATALYST
     ["Catalyst"] = {
         "Electrically Charged",
         "Void Lightning",
@@ -376,6 +391,7 @@ local UPGRADE_CHAIN = {
         "Deadly Bolts"
     },
 
+    -- CHAINSAW
     ["Chainsaw Wielder"] = {
         "Soundproof",
         "Extra Protection",
@@ -383,29 +399,15 @@ local UPGRADE_CHAIN = {
         "Magical Shredding"
     },
 
-    ["Helicopter Kid"] = {
+    -- ✅ DRONE PILOT (fix đúng theo em)
+    ["Drone Pilot"] = {
         "Stable Flying",
         "Bombs",
         "Toxic Bombs",
         "Death Heli"
-    },
-
-    ["Lava Sniper"] = {
-        "Fire Shades",
-        "Magma Hat",
-        "Lava Coat",
-        "Eruption Sniper",
-        "Volcanic Lasers"
-    ["Ray Blaster"] = {
-        "Geometrical Suit",
-        "Hacker",
-        "Overclocked Core",
-        "Digital Overdrive",
-        "Quantum Blaster"
-        }
     }
-}
 
+}
 -- =====================
 -- WAIT GOLD
 -- =====================
@@ -1152,6 +1154,23 @@ end
 -- =====================
 
 local drones = {}
+
+local dronePos = {
+    CFrame.new(-215.9520, 3.5499, -61.3907)
+        * CFrame.Angles(0, -0.0046613938, 0),
+
+    CFrame.new(-213.3204, 3.5499, -61.3424)
+        * CFrame.Angles(0, 0.0296463463, 0),
+
+    CFrame.new(-210.4897, 3.5499, -61.1651)
+        * CFrame.Angles(0, 0.0471977666, 0),
+
+    CFrame.new(-215.0032, 3.3995, -57.8957)
+        * CFrame.Angles(0, -0.0539711676, 0),
+
+    CFrame.new(-212.2083, 3.3995, -57.9016)
+        * CFrame.Angles(0, 0.0091710835, 0)
+}
 
 -- PLACE ALL
 for i,cf in ipairs(dronePos) do
