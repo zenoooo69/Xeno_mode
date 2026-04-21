@@ -77,7 +77,7 @@ corner.CornerRadius = UDim.new(0, 8)
 local title = Instance.new("TextLabel")
 title.Size = UDim2.new(1,0,0,20)
 title.BackgroundTransparency = 1
-title.Text = "67 Xeno 67"
+title.Text = "69 Xeno 69"
 title.TextColor3 = Color3.fromRGB(255,255,255)
 title.TextScaled = true
 title.Font = Enum.Font.GothamBold
@@ -961,12 +961,30 @@ local sniperPos = {
 
 local snipers = {}
 
+-- =====================
+-- PLACE ALL (delay 0.5s)
+-- =====================
 for i,cf in ipairs(sniperPos) do
     safeWait()
     waitGold("Lava Sniper", false)
 
-    local s = spawnTowerSafe({"Lava Sniper", cf, nil, "Laser Sniper", "Lava Sniper"})
-    s = safeFix(s, cf, "Laser Sniper")
+    snipers[i] = spawnTowerSafe({
+        "Lava Sniper",
+        cf,
+        nil,
+        "Laser Sniper",
+        "Lava Sniper"
+    })
+
+    task.wait(0.5)
+end
+
+-- =====================
+-- UPGRADE ALL
+-- =====================
+for i,s in ipairs(snipers) do
+    safeWait()
+    s = safeFix(s, sniperPos[i], "Laser Sniper")
 
     if s then
         waitGold("Fire Shades", true, s)
@@ -980,29 +998,41 @@ end
 -- =====================
 -- 7. WIZARD (2 FULL)
 -- =====================
-local function fullWizard(cf)
+local wizardPos = {
+    CFrame.new(-213.06,3.39,-72.91),
+    CFrame.new(-209.74,3.39,-73.72)
+}
+
+local wizards = {}
+
+-- PLACE FIRST
+for i,cf in ipairs(wizardPos) do
     safeWait()
     waitGold("Galaxy Wizard", false)
 
-    local w = spawnTowerSafe({"Galaxy Wizard", cf, nil, "Wizard", "Galaxy Wizard"})
-    w = safeFix(w, cf, "Wizard")
-    if not w then return end
-
-    waitGold("Galaxy Potions", true, w)
-    w = spawnTowerSafe({"Galaxy Potions", w:GetPivot(), w, "Wizard"})
-
-    waitGold("Galaxy Spells", true, w)
-    w = spawnTowerSafe({"Galaxy Spells", w:GetPivot(), w, "Wizard"})
-
-    waitGold("Enhanced Galaxy Spells", true, w)
-    w = spawnTowerSafe({"Enhanced Galaxy Spells", w:GetPivot(), w, "Wizard"})
-
-    waitGold("Galactic Staff", true, w)
-    spawnTowerSafe({"Galactic Staff", w:GetPivot(), w, "Wizard"})
+    wizards[i] = spawnTowerSafe({"Galaxy Wizard", cf, nil, "Wizard", "Galaxy Wizard"})
+    task.wait(0.5)
 end
 
-fullWizard(CFrame.new(-213.06,3.39,-72.91))
-fullWizard(CFrame.new(-209.74,3.39,-73.72))
+-- UPGRADE
+for i,w in ipairs(wizards) do
+    safeWait()
+    w = safeFix(w, wizardPos[i], "Wizard")
+
+    if w then
+        waitGold("Galaxy Potions", true, w)
+        w = spawnTowerSafe({"Galaxy Potions", w:GetPivot(), w, "Wizard"})
+
+        waitGold("Galaxy Spells", true, w)
+        w = spawnTowerSafe({"Galaxy Spells", w:GetPivot(), w, "Wizard"})
+
+        waitGold("Enhanced Galaxy Spells", true, w)
+        w = spawnTowerSafe({"Enhanced Galaxy Spells", w:GetPivot(), w, "Wizard"})
+
+        waitGold("Galactic Staff", true, w)
+        wizards[i] = spawnTowerSafe({"Galactic Staff", w:GetPivot(), w, "Wizard"})
+    end
+end
 
 -- =====================
 -- 8. MACHINIST
@@ -1121,17 +1151,9 @@ end
 -- DRONE PILOT (5 → LV5)
 -- =====================
 
-local dronePos = {
-    CFrame.new(-215.95, 3.54, -61.39),
-    CFrame.new(-213.32, 3.54, -61.34),
-    CFrame.new(-210.48, 3.54, -61.16),
-    CFrame.new(-215.00, 3.39, -57.89),
-    CFrame.new(-212.20, 3.39, -57.90)
-}
-
 local drones = {}
 
--- Spawn base
+-- PLACE ALL
 for i,cf in ipairs(dronePos) do
     safeWait()
     waitGold("Helicopter Kid", false)
@@ -1143,9 +1165,11 @@ for i,cf in ipairs(dronePos) do
         "Drone Pilot",
         "Helicopter Kid"
     })
+
+    task.wait(0.5)
 end
 
--- Upgrade lên LV5
+-- UPGRADE
 for i,d in ipairs(drones) do
     safeWait()
     d = safeFix(d, dronePos[i], "Drone Pilot")
@@ -1169,32 +1193,35 @@ end
 -- CHAINSAW (4 → LV5)
 -- =====================
 
-local chainsawPos = {
-    CFrame.new(-220.85, 3.28, -63.54),
-    CFrame.new(-220.82, 3.28, -60.93),
-    CFrame.new(-220.82, 3.28, -57.81),
-    CFrame.new(-218.02, 3.28, -56.76)
-}
-
 local chainsaws = {}
 
--- Spawn base
+local chainsawPos = {
+    CFrame.new(-220.8536, 3.2845, -63.5424) * CFrame.Angles(0, 0, 0),
+    CFrame.new(-220.8257, 3.2845, -60.9326) * CFrame.Angles(0, 0, 0),
+    CFrame.new(-220.8209, 3.2845, -57.8157) * CFrame.Angles(0, 0, 0),
+    CFrame.new(-218.0222, 3.2845, -56.7653)
+        * CFrame.Angles(0, 5.018965324162116e-32, 1.148205388565229e-24)
+}
+
+-- PLACE ALL
 for i,cf in ipairs(chainsawPos) do
     safeWait()
     waitGold("ChainsawWielder", false)
 
     chainsaws[i] = spawnTowerSafe({
         "ChainsawWielder",
-        cf,
+        cf, -- ✅ đã có cả rotation
         nil,
-        "ChainsawWielder"
+        "Chainsaw Wielder"
     })
+
+    task.wait(0.5)
 end
 
--- Upgrade lên LV5
+-- UPGRADE
 for i,c in ipairs(chainsaws) do
     safeWait()
-    c = safeFix(c, chainsawPos[i], "Chainsaw Wielder")
+    c = safeFix(c, chainsawPos[i], "Chainsaw Wielder") -- ✅ dùng lại đúng CFrame
 
     if c then
         waitGold("Soundproof", true, c)
@@ -1211,7 +1238,6 @@ for i,c in ipairs(chainsaws) do
     end
 end
 
-
 local catalystPos = {
     CFrame.new(-216.8484,3.2845,-52.3482),
     CFrame.new(-212.6117,3.3995,-64.7285),
@@ -1220,12 +1246,19 @@ local catalystPos = {
 
 local catalysts = {}
 
+-- PLACE ALL
 for i,cf in ipairs(catalystPos) do
     safeWait()
     waitGold("Catalyst", false)
 
-    local c = spawnTowerSafe({"Catalyst", cf, nil, "Catalyst"})
-    c = safeFix(c, cf, "Catalyst")
+    catalysts[i] = spawnTowerSafe({"Catalyst", cf, nil, "Catalyst"})
+    task.wait(0.5)
+end
+
+-- UPGRADE
+for i,c in ipairs(catalysts) do
+    safeWait()
+    c = safeFix(c, catalystPos[i], "Catalyst")
 
     if c then
         waitGold("Electrically Charged", true, c)
@@ -1241,7 +1274,6 @@ for i,cf in ipairs(catalystPos) do
         catalysts[i] = spawnTowerSafe({"Deadly Bolts", c:GetPivot(), c, "Catalyst"})
     end
 end
-
 -- =====================
 -- BUILD FINISHED
 -- =====================
