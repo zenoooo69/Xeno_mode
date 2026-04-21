@@ -965,7 +965,7 @@ safeWait()
 waitGold("Geo Blaster", false)
 
 local rb_cf = CFrame.new(-220.46,3.54,-66.26)
-local rb = spawnTowerSafe({"Geo Blaster", rb_cf, nil, "Ray Blaster", "Geo Blaster"}
+local rb = spawnTowerSafe({"Geo Blaster", rb_cf, nil, "Ray Blaster", "Geo Blaster"})
 rb = safeFix(rb, rb_cf, "Geo Blaster")
 rb = upgradeTower(rb, "Geo Blaster",2)
 
@@ -1068,7 +1068,7 @@ end
 for i,w in ipairs(wizards) do
     safeWait()
     w = safeFix(w, wizardPos[i], "Galaxy Wizard")
-    wizards[i] = upgradeTower(w, "Galaxy Wizard")
+    wizards[i] = upgradeTower(w, "Galaxy Wizard",4)
 end
 
 -- =====================
@@ -1092,7 +1092,7 @@ m = safeFix(m, m_cf, "Machinist")
 if m then
     safeWait()
     m = safeFix(m, m_cf, "Machinist")
-    m = upgradeTower(m, "Machinist")    
+    m = upgradeTower(m, "Machinist",4)    
 end
 
 -- =====================
@@ -1103,7 +1103,7 @@ end
 for i,g in ipairs(guardians) do
     safeWait()
     g = safeFix(g, guardianPos[i], "Guardian")
-    guardians[i] = upgradeTower(g, "Guardian")
+    guardians[i] = upgradeTower(g, "Guardian",2)
 end
 
 
@@ -1113,7 +1113,7 @@ end
 for i,s in ipairs(snipers) do
     safeWait()
     s = safeFix(s, sniperPos[i], "Lava Sniper")
-    snipers[i] = upgradeTower(s, "Lava Sniper")
+    snipers[i] = upgradeTower(s, "Lava Sniper",3)
 end
 
 -- =====================
@@ -1169,7 +1169,7 @@ end
 for i,d in ipairs(drones) do
     safeWait()
     d = safeFix(d, dronePos[i], "Helicopter Kid")
-    drones[i] = upgradeTower(d, "Helicopter Kid")
+    drones[i] = upgradeTower(d, "Helicopter Kid",4)
 end
 -- =====================
 -- CHAINSAW (4 → LV5)
@@ -1188,10 +1188,10 @@ local chainsawPos = {
 -- PLACE ALL
 for i,cf in ipairs(chainsawPos) do
     safeWait()
-    waitGold("ChainsawWielder", false)
+    waitGold("Chainsaw Wielder", false)
 
     chainsaws[i] = spawnTowerSafe({
-        "ChainsawWielder",
+        "Chainsaw Wielder",
         cf, -- ✅ đã có cả rotation
         nil,
         "Chainsaw Wielder"
@@ -1204,7 +1204,7 @@ end
 for i,c in ipairs(chainsaws) do
     safeWait()
     c = safeFix(c, chainsawPos[i], "Chainsaw Wielder")
-    chainsaws[i] = upgradeTower(c, "Chainsaw Wielder")
+    chainsaws[i] = upgradeTower(c, "Chainsaw Wielder",4)
 end
 
 local catalystPos = {
@@ -1228,17 +1228,17 @@ end
 for i,c in ipairs(catalysts) do
     safeWait()
     c = safeFix(c, catalystPos[i], "Catalyst")
-    catalysts[i] = upgradeTower(c, "Catalyst")
+    catalysts[i] = upgradeTower(c, "Catalyst",4)
 end
 -- =====================
 -- BUILD FINISHED
 -- =====================
 BUILD_DONE = true
 
-goldLabel.Text = "Build Done"
-needLabel.Text = "Rebuilding..."
-costLabel.Text = "-"
-nextLabel.Text = "-"
+goldLabel.Text = "Xong"
+needLabel.Text = "Hết"
+costLabel.Text = "Tower"
+nextLabel.Text = "Rồì"
 
 print("✅ BUILD DONE - REBUILD MODE")
 
