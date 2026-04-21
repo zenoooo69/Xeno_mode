@@ -396,6 +396,13 @@ local UPGRADE_CHAIN = {
         "Lava Coat",
         "Eruption Sniper",
         "Volcanic Lasers"
+    ["Ray Blaster"] = {
+        "Geometrical Suit",
+        "Hacker",
+        "Overclocked Core",
+        "Digital Overdrive",
+        "Quantum Blaster"
+        }
     }
 }
 
@@ -1000,11 +1007,19 @@ fullWizard(CFrame.new(-209.74,3.39,-73.72))
 -- =====================
 -- 8. MACHINIST
 -- =====================
+
 safeWait()
 waitGold("Machinist", false)
 
-local m_cf = CFrame.new(-213.60,3.39,-70.96)
-local m = spawnTowerSafe({"Machinist", m_cf, nil, "Machinist"})
+local m_cf = CFrame.new(-212.6984, 3.3995, -69.1346) * CFrame.Angles(0, -0.0564620979, 0)
+
+local m = spawnTowerSafe({
+    "Machinist",
+    m_cf,
+    nil,
+    "Machinist"
+})
+
 m = safeFix(m, m_cf, "Machinist")
 
 if m then
