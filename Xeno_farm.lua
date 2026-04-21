@@ -315,6 +315,82 @@ local CUSTOM_COST = {
     ["Hacker"] = 3250,
 }
 
+local upgradeMap = {
+
+    -- =====================
+    -- GUARDIAN
+    -- =====================
+    ["Guardian"] = "Deserted Armor",
+    ["Deserted Armor"] = "Snowy Helmet",
+    ["Snowy Helmet"] = "Lava Knight",
+    ["Lava Knight"] = "Electrifying Sword",
+    ["Electrifying Sword"] = "Guardian Angel",
+
+    -- =====================
+    -- LAVA MORTAR
+    -- =====================
+    ["Electric Mortar"] = "Electric Hat",
+    ["Electric Hat"] = "Lightning Lava",
+    ["Lightning Lava"] = "Electrically Trained",
+    ["Electrically Trained"] = "Mega Zap Mortar",
+
+    -- =====================
+    -- LAVA SNIPER
+    -- =====================
+    ["Lava Sniper"] = "Fire Shades",
+    ["Fire Shades"] = "Magma Hat",
+    ["Magma Hat"] = "Lava Coat",
+    ["Lava Coat"] = "Eruption Sniper",
+    ["Eruption Sniper"] = "Volcanic Lasers",
+
+    -- =====================
+    -- CATALYST
+    -- =====================
+    ["Catalyst"] = "Electrically Charged",
+    ["Electrically Charged"] = "Void Lightning",
+    ["Void Lightning"] = "High Voltage",
+    ["High Voltage"] = "Deadly Bolts",
+
+    -- =====================
+    -- CHAINSAW
+    -- =====================
+    ["Chainsaw Wielder"] = "Soundproof",
+    ["Soundproof"] = "Extra Protection",
+    ["Extra Protection"] = "Magic Chainsaw",
+    ["Magic Chainsaw"] = "Magical Shredding",
+
+    -- =====================
+    -- HELICOPTER / DRONE PILOT
+    -- =====================
+    ["Helicopter Kid"] = "Stable Flying",
+    ["Stable Flying"] = "Bombs",
+    ["Bombs"] = "Toxic Bombs",
+    ["Toxic Bombs"] = "Death Heli",
+
+    -- =====================
+    -- WIZARD
+    -- =====================
+    ["Galaxy Wizard"] = "Galaxy Potions",
+    ["Galaxy Potions"] = "Galaxy Spells",
+    ["Galaxy Spells"] = "Enhanced Galaxy Spells",
+    ["Enhanced Galaxy Spells"] = "Galactic Staff",
+
+    -- =====================
+    -- MACHINIST
+    -- =====================
+    ["Machinist"] = "Faster Working",
+    ["Faster Working"] = "Second Machine",
+    ["Second Machine"] = "True Machinist",
+    ["True Machinist"] = "Futurist",
+
+    -- =====================
+    -- GEO / RAY BLASTER
+    -- =====================
+    ["Geo Blaster"] = "Geometrical Suit",
+    ["Geometrical Suit"] = "Hacker"
+}
+
+
 local function getCost(name, up, towerInstance)
     local base = CUSTOM_COST[name] or BASE_COST[name] or 0
     local cost = base * (up and upgradeMulti.Value or placeMulti.Value)
@@ -536,35 +612,32 @@ end
 -- =====================
 -- UPGRADE
 -- =====================
-local function upgradeTower(tower, lv)
-    local class = tower:FindFirstChild("Class").Value
-    local chain = UPGRADE_CHAIN[class]
+local function upgradeTower(m, baseName, maxSteps)
+    if not m then return end
 
-    if not chain then return nil end
+    local steps = 0
 
-    local upgradeName = chain[lv-1]
-    if not upgradeName then return nil end
+    while upgradeMap[m.Name] do
+        if maxSteps and steps >= maxSteps then
+            break
+        end
 
-    -- waitGold
-    if not waitGoldRebuild(upgradeName, true, tower) then
-        return nil
+        local nextName = upgradeMap[m.Name]
+
+        waitGold(nextName, true, m)
+
+        m = spawnTowerSafe({
+            nextName,
+            m:GetPivot(),
+            m,
+            baseName
+        })
+
+        steps += 1
     end
 
-    local newTower = spawn({
-        upgradeName,
-        tower:GetPivot(),
-        tower,
-        class
-    })
-
-    -- 🔥 return khi success only
-    if newTower then
-        return newTower
-    end
-
-    return nil
+    return m
 end
-
 -- =====================
 -- REBUILD QUEUE
 -- =====================
@@ -892,16 +965,9 @@ safeWait()
 waitGold("Geo Blaster", false)
 
 local rb_cf = CFrame.new(-220.46,3.54,-66.26)
-local rb = spawnTowerSafe({"Geo Blaster", rb_cf, nil, "Ray Blaster", "Geo Blaster"})
-rb = safeFix(rb, rb_cf, "Ray Blaster")
-
-if rb then
-    waitGold("Geometrical Suit", true, rb)
-    rb = spawnTowerSafe({"Geometrical Suit", rb:GetPivot(), rb, "Ray Blaster"})
-
-    waitGold("Hacker", true, rb)
-    rb = spawnTowerSafe({"Hacker", rb:GetPivot(), rb, "Ray Blaster"})
-end
+local rb = spawnTowerSafe({"Geo Blaster", rb_cf, nil, "Ray Blaster", "Geo Blaster"}
+rb = safeFix(rb, rb_cf, "Geo Blaster")
+rb = upgradeTower(rb, "Geo Blaster",2)
 
 -- =====================
 -- 4. ELECTRIC MORTAR (6)
@@ -929,12 +995,8 @@ end
 for i,g in ipairs(guardians) do
     safeWait()
     g = safeFix(g, guardianPos[i], "Guardian")
-
-    if g then
-        waitGold("Deserted Armor", true, g)
-        guardians[i] = spawnTowerSafe({"Deserted Armor", g:GetPivot(), g, "Guardian"})
+    guardians[i] = upgradeTower(g, "Guardian",1)
     end
-end
 
 -- =====================
 -- 6. GUARDIAN LV3-4
@@ -942,15 +1004,8 @@ end
 for i,g in ipairs(guardians) do
     safeWait()
     g = safeFix(g, guardianPos[i], "Guardian")
-
-    if g then
-        waitGold("Snowy Helmet", true, g)
-        g = spawnTowerSafe({"Snowy Helmet", g:GetPivot(), g, "Guardian"})
-
-        waitGold("Lava Knight", true, g)
-        guardians[i] = spawnTowerSafe({"Lava Knight", g:GetPivot(), g, "Guardian"})
+    guardians[i] = upgradeTower(g, "Guardian",2)
     end
-end
 
 local sniperPos = {
     CFrame.new(-209.96,3.54,-77.19),
@@ -986,16 +1041,9 @@ end
 -- =====================
 for i,s in ipairs(snipers) do
     safeWait()
-    s = safeFix(s, sniperPos[i], "Laser Sniper")
-
-    if s then
-        waitGold("Fire Shades", true, s)
-        s = spawnTowerSafe({"Fire Shades", s:GetPivot(), s, "Laser Sniper"})
-
-        waitGold("Magma Hat", true, s)
-        snipers[i] = spawnTowerSafe({"Magma Hat", s:GetPivot(), s, "Laser Sniper"})
+    s = safeFix(s, sniperPos[i], "Lava Sniper",2)
+    snipers[i] = upgradeTower(s, "Lava Sniper",2)
     end
-end
 
 -- =====================
 -- 7. WIZARD (2 FULL)
@@ -1019,21 +1067,8 @@ end
 -- UPGRADE
 for i,w in ipairs(wizards) do
     safeWait()
-    w = safeFix(w, wizardPos[i], "Wizard")
-
-    if w then
-        waitGold("Galaxy Potions", true, w)
-        w = spawnTowerSafe({"Galaxy Potions", w:GetPivot(), w, "Wizard"})
-
-        waitGold("Galaxy Spells", true, w)
-        w = spawnTowerSafe({"Galaxy Spells", w:GetPivot(), w, "Wizard"})
-
-        waitGold("Enhanced Galaxy Spells", true, w)
-        w = spawnTowerSafe({"Enhanced Galaxy Spells", w:GetPivot(), w, "Wizard"})
-
-        waitGold("Galactic Staff", true, w)
-        wizards[i] = spawnTowerSafe({"Galactic Staff", w:GetPivot(), w, "Wizard"})
-    end
+    w = safeFix(w, wizardPos[i], "Galaxy Wizard")
+    wizards[i] = upgradeTower(w, "Galaxy Wizard")
 end
 
 -- =====================
@@ -1055,75 +1090,30 @@ local m = spawnTowerSafe({
 m = safeFix(m, m_cf, "Machinist")
 
 if m then
-    waitGold("Faster Working", true, m)
-    m = spawnTowerSafe({"Faster Working", m:GetPivot(), m, "Machinist"})
-
-    waitGold("Second Machine", true, m)
-    m = spawnTowerSafe({"Second Machine", m:GetPivot(), m, "Machinist"})
-
-    waitGold("True Machinist", true, m)
-    m = spawnTowerSafe({"True Machinist", m:GetPivot(), m, "Machinist"})
-
-    waitGold("Futurist", true, m)
-    m = spawnTowerSafe({"Futurist", m:GetPivot(), m, "Machinist"})
+    safeWait()
+    m = safeFix(m, m_cf, "Machinist")
+    m = upgradeTower(m, "Machinist")    
 end
 
 -- =====================
 -- GUARDIAN FULL LV6
 -- =====================
 
--- LV5
+-- LV5 - 6
 for i,g in ipairs(guardians) do
     safeWait()
     g = safeFix(g, guardianPos[i], "Guardian")
-
-    if g then
-        waitGold("Electrifying Sword", true, g)
-        g = spawnTowerSafe({
-            "Electrifying Sword",
-            g:GetPivot(),
-            g,
-            "Guardian"
-        })
-
-        guardians[i] = g
-    end
-end
-
--- LV6 (FINAL)
-for i,g in ipairs(guardians) do
-    safeWait()
-    g = safeFix(g, guardianPos[i], "Guardian")
-
-    if g then
-        waitGold("Guardian Angel", true, g)
-        guardians[i] = spawnTowerSafe({
-            "Guardian Angel",
-            g:GetPivot(),
-            g,
-            "Guardian"
-        })
-    end
+    guardians[i] = upgradeTower(g, "Guardian")
 end
 
 
 -- =====================
 -- SNIPER FULL LV6
--- =====================
+-- ================
 for i,s in ipairs(snipers) do
     safeWait()
-    s = safeFix(s, sniperPos[i], "Laser Sniper")
-
-    if s then
-        waitGold("Lava Coat", true, s)
-        s = spawnTowerSafe({"Lava Coat", s:GetPivot(), s, "Laser Sniper"})
-
-        waitGold("Eruption Sniper", true, s)
-        s = spawnTowerSafe({"Eruption Sniper", s:GetPivot(), s, "Laser Sniper"})
-
-        waitGold("Volcanic Lasers", true, s)
-        snipers[i] = spawnTowerSafe({"Volcanic Lasers", s:GetPivot(), s, "Laser Sniper"})
-    end
+    s = safeFix(s, sniperPos[i], "Lava Sniper")
+    snipers[i] = upgradeTower(s, "Lava Sniper")
 end
 
 -- =====================
@@ -1131,21 +1121,8 @@ end
 -- =====================
 for i,m in ipairs(mortars) do
     safeWait()
-    m = safeFix(m, mortarPos[i], "Lava Mortar")
-
-    if m then
-        waitGold("Electric Hat", true, m)
-        m = spawnTowerSafe({"Electric Hat", m:GetPivot(), m, "Lava Mortar"})
-
-        waitGold("Lightning Lava", true, m)
-        m = spawnTowerSafe({"Lightning Lava", m:GetPivot(), m, "Lava Mortar"})
-
-        waitGold("Electrically Trained", true, m)
-        m = spawnTowerSafe({"Electrically Trained", m:GetPivot(), m, "Lava Mortar"})
-
-        waitGold("Mega Zap Mortar", true, m)
-        mortars[i] = spawnTowerSafe({"Mega Zap Mortar", m:GetPivot(), m, "Lava Mortar"})
-    end
+    m = safeFix(m, mortarPos[i], "Electric Mortar")
+    mortars[i] = upgradeTower(m, "Electric Mortar")
 end
 
 
@@ -1191,23 +1168,9 @@ end
 -- UPGRADE
 for i,d in ipairs(drones) do
     safeWait()
-    d = safeFix(d, dronePos[i], "Drone Pilot")
-
-    if d then
-        waitGold("Stable Flying", true, d)
-        d = spawnTowerSafe({"Stable Flying", d:GetPivot(), d, "Drone Pilot"})
-
-        waitGold("Bombs", true, d)
-        d = spawnTowerSafe({"Bombs", d:GetPivot(), d, "Drone Pilot"})
-
-        waitGold("Toxic Bombs", true, d)
-        d = spawnTowerSafe({"Toxic Bombs", d:GetPivot(), d, "Drone Pilot"})
-
-        waitGold("Death Heli", true, d)
-        drones[i] = spawnTowerSafe({"Death Heli", d:GetPivot(), d, "Drone Pilot"})
-    end
+    d = safeFix(d, dronePos[i], "Helicopter Kid")
+    drones[i] = upgradeTower(d, "Helicopter Kid")
 end
-
 -- =====================
 -- CHAINSAW (4 → LV5)
 -- =====================
@@ -1240,21 +1203,8 @@ end
 -- UPGRADE
 for i,c in ipairs(chainsaws) do
     safeWait()
-    c = safeFix(c, chainsawPos[i], "Chainsaw Wielder") -- ✅ dùng lại đúng CFrame
-
-    if c then
-        waitGold("Soundproof", true, c)
-        c = spawnTowerSafe({"Soundproof", c:GetPivot(), c, "Chainsaw Wielder"})
-
-        waitGold("Extra Protection", true, c)
-        c = spawnTowerSafe({"Extra Protection", c:GetPivot(), c, "Chainsaw Wielder"})
-
-        waitGold("Magic Chainsaw", true, c)
-        c = spawnTowerSafe({"Magic Chainsaw", c:GetPivot(), c, "Chainsaw Wielder"})
-
-        waitGold("Magical Shredding", true, c)
-        chainsaws[i] = spawnTowerSafe({"Magical Shredding", c:GetPivot(), c, "Chainsaw Wielder"})
-    end
+    c = safeFix(c, chainsawPos[i], "Chainsaw Wielder")
+    chainsaws[i] = upgradeTower(c, "Chainsaw Wielder")
 end
 
 local catalystPos = {
@@ -1278,20 +1228,7 @@ end
 for i,c in ipairs(catalysts) do
     safeWait()
     c = safeFix(c, catalystPos[i], "Catalyst")
-
-    if c then
-        waitGold("Electrically Charged", true, c)
-        c = spawnTowerSafe({"Electrically Charged", c:GetPivot(), c, "Catalyst"})
-
-        waitGold("Void Lightning", true, c)
-        c = spawnTowerSafe({"Void Lightning", c:GetPivot(), c, "Catalyst"})
-
-        waitGold("High Voltage", true, c)
-        c = spawnTowerSafe({"High Voltage", c:GetPivot(), c, "Catalyst"})
-
-        waitGold("Deadly Bolts", true, c)
-        catalysts[i] = spawnTowerSafe({"Deadly Bolts", c:GetPivot(), c, "Catalyst"})
-    end
+    catalysts[i] = upgradeTower(c, "Catalyst")
 end
 -- =====================
 -- BUILD FINISHED
